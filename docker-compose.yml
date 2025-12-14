@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: cicd_backend
+    ports:
+      - "5005:5005"
+
+  frontend:
+    image: nginx:latest
+    container_name: cicd_frontend
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    ports:
+      - "5006:80"

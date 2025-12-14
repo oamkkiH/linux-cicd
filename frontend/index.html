@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CI/CD Harjoitus</title>
+</head>
+<body>
+<h2>CI/CD Frontend tässä</h2>
+
+<button onclick="getServerTime()">Get Server Time</button>
+<p id="output"></p>
+
+<script>
+async function getServerTime() {
+    const response = await fetch('/cicd/api/time');
+    const json = await response.json();
+    document.getElementById("output").innerText = json.server_time;
+}
+</script>
+
+</body>
+</html>
