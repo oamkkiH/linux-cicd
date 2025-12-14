@@ -1,19 +1,17 @@
 from flask import Flask, jsonify
 from datetime import datetime
-import platform
-import pytz
 
 app = Flask(__name__)
 
-@app.get("/api/time")
+@app.route("/api/time", methods=["GET"])
 def get_time():
-    tz = pytz.timezone("Europe/Helsinki")
-    now = datetime.now(tz)
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return jsonify({"server_time": now})
 
-    return jsonify({
-        "status": "ok",
-        "time": now.strftime("%Y-%m-%d %H:%M:%S"),
-        "timestamp": int(now.timestamp()),
-        "timezone": "Europe/Helsinki",
-        "server": platform.node()
-    })
+@app.route("/", methods=["GET"])
+def root():
+    return jsonify({"message": "Backend running"})
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5005)
