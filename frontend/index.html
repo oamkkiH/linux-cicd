@@ -3,64 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CI/CD Harjoitus</title>
+    <title>CI/CD Frontend</title>
+
     <style>
         body {
+            margin: 0;
+            height: 100vh;
+            background: #1f1f1f;
             font-family: Arial, sans-serif;
-            background: #1e1e1e;
-            color: #f0f0f0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            color: #eee;
         }
+
         .card {
-            padding: 30px;
             background: #2c2c2c;
+            padding: 40px;
             border-radius: 12px;
+            width: 380px;
             text-align: center;
-            width: 320px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+            animation: fadein 0.6s ease-out;
         }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        p {
+            margin: 0 0 20px 0;
+            color: #bbb;
+        }
+
         button {
-            padding: 12px 20px;
+            padding: 12px 22px;
+            background: #0d6efd;
             border: none;
-            border-radius: 8px;
-            background: #0078ff;
+            border-radius: 6px;
             color: white;
             font-size: 16px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.2s ease;
         }
+
         button:hover {
-            background: #3399ff;
+            background: #0b5ed7;
+            transform: translateY(-2px);
         }
-        #output {
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #time {
             margin-top: 20px;
             font-size: 18px;
             font-weight: bold;
+            color: #fff;
+        }
+
+        #status {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
+
 <body>
+
     <div class="card">
-        <h2>Behold CI/CD Frontend</h2>
-        <p>Serverin aika  backend APIsta.</p>
-        <button onclick="loadTime()">Get Server Time</button>
-        <div id="output"></div>
+        <h1>Behold CI/CD Frontend</h1>
+        <p>Serverin aika backend APIsta.</p>
+
+        <button onclick="getServerTime()">Get Server Time</button>
+
+        <div id="time">—</div>
+        <div id="status">Idle</div>
     </div>
 
     <script>
-        async function loadTime() {
-            try {
-                const res = await fetch("/cicd/api/time");
-                const data = await res.json();
-                document.getElementById("output").innerText = data.server_time;
-            } catch (e) {
-                document.getElementById("output").innerText = "Error loading time.";
-            }
+        function getServerTime() {
+            document.getElementById("status").textContent = "Fetching...";
+
+            fetch("/api/time")
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("time").textContent = data.time;
+                    document.getElementById("status").textContent = "OK";
+                })
+                .catch(err => {
+                    document.getElementById("status").textContent = "API Error";
+                });
         }
     </script>
+
 </body>
 </html>
