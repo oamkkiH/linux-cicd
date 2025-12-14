@@ -1,17 +1,28 @@
 from flask import Flask, jsonify
-from datetime import datetime
+import time
 
 app = Flask(__name__)
 
-@app.route("/api/time", methods=["GET"])
-def get_time():
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    return jsonify({"server_time": now})
-
-@app.route("/", methods=["GET"])
+@app.route("/")
 def root():
-    return jsonify({"message": "Backend running"})
+    return jsonify({
+        "status": "ok",
+        "message": "CI/CD demo backend running"
+    })
 
+@app.route("/health")
+def health():
+    return jsonify({
+        "status": "healthy",
+        "timestamp": time.time()
+    })
+
+@app.route("/api/time")
+def api_time():
+    # Return Europe/Helsinki local time
+    helsinki_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    return jsonify({"server_time": helsinki_time})
 
 if __name__ == "__main__":
+    # Run backend on port 5005 for Docker
     app.run(host="0.0.0.0", port=5005)
