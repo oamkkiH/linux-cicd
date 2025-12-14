@@ -1,22 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CI/CD Harjoitus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1e1e1e;
+            color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            padding: 30px;
+            background: #2c2c2c;
+            border-radius: 12px;
+            text-align: center;
+            width: 320px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #0078ff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #3399ff;
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<h2>CI/CD Frontend TESTIÄ</h2>
+    <div class="card">
+        <h2>Behold CI/CD Frontend</h2>
+        <p>Serverin aika  backend APIsta.</p>
+        <button onclick="loadTime()">Get Server Time</button>
+        <div id="output"></div>
+    </div>
 
-<button onclick="getServerTime()">Get Server Time</button>
-<p id="output"></p>
-
-<script>
-async function getServerTime() {
-    const response = await fetch('/cicd/api/time');
-    const json = await response.json();
-    document.getElementById("output").innerText = json.server_time;
-}
-</script>
-
+    <script>
+        async function loadTime() {
+            try {
+                const res = await fetch("/cicd/api/time");
+                const data = await res.json();
+                document.getElementById("output").innerText = data.server_time;
+            } catch (e) {
+                document.getElementById("output").innerText = "Error loading time.";
+            }
+        }
+    </script>
 </body>
 </html>

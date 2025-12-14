@@ -1,22 +1,20 @@
 from flask import Flask, jsonify
-import time
+from datetime import datetime
+import logging
 
 app = Flask(__name__)
 
-@app.route("/")
-def root():
-    return jsonify({
-        "status": "ok",
-        "message": "CI/CD demo backend running"
-    })
+logging.basicConfig(level=logging.INFO)
 
 @app.route("/health")
 def health():
-    return jsonify({"status": "healthy", "timestamp": time.time()})
+    return jsonify({"status": "ok", "service": "cicd-backend"}), 200
 
 @app.route("/api/time")
-def api_time():
-    return jsonify({"server_time": time.ctime()})
+def server_time():
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    app.logger.info(f"Time request served: {now}")
+    return jsonify({"server_time": now})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5005)
